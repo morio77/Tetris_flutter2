@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'mino_state.dart';
 
+import 'dart:math' as math;
+
 const int lowerLimitOfFallSpeed = 100; // 落下速度の下限
+final random = math.Random();
 
 class MinoController extends ChangeNotifier{
   final int initialFallSpeed;
@@ -10,15 +13,23 @@ class MinoController extends ChangeNotifier{
 
   int currentFallSpeed; // 現在の落下速度
   bool isGameOver = false; // ゲームオーバーになったかどうか。
+  MinoRingBuffer minoRingBuffer; // 7種1巡の法則が適用された、出現するミノをリングバッファとして保持
+
+  /// ゲームスタート
+  void startGame() {
+    // ミノリストを生成する
+
+    // メインループへ
+  }
+
 
   /// =============
   /// メインのループ
   /// =============
   /// ①前処理（ミノを生成する）
   /// ②1マス落下のループ処理
-  /// ③0.5秒の猶予
-  /// ④後処理（ミノをフィックスさせる）
-  void mainLoop() {
+  /// ③後処理（ミノをフィックスさせる）
+  void startMainLoop() {
 
     currentFallSpeed = initialFallSpeed;
 
@@ -27,9 +38,7 @@ class MinoController extends ChangeNotifier{
 
       _subRoutine();
 
-      _graceBeforeFixing();
-
-      _PostProcessing();
+      _postProcessing();
     }
 
   }
@@ -41,17 +50,50 @@ class MinoController extends ChangeNotifier{
       currentFallSpeed--;
     }
 
-  }
+    // ミノを生成する
 
-  void _subRoutine() {
-
-  }
-
-  void _graceBeforeFixing() {
+    // 衝突判定
 
   }
 
-  void _PostProcessing() {
+  /// フィックスするまで1段落とし続ける
+  Future<void> _subRoutine() async {
+    bool isFixed = false;
+    int deferralCount = 0; // 0.5秒の猶予を使える回数
 
+    while (true){
+      // 1段落下させられるなら、1段落下させる
+      if (!_isCollideBottom()) {
+
+      }
+      // 1段落下させられないなら、0.5秒の猶予を設ける
+      else {
+        isFixed = true;
+      }
+
+      // 0.5秒の猶予（15回まで使える）
+      if (isFixed && deferralCount < 15) {
+
+        // ToDo:ここでタイマーの時間を0.5に変えてなんとかできないか
+
+        if (!_isCollideBottom()) {
+          isFixed = false;
+          deferralCount++;
+        }
+      }
+
+      // フィックスしたら抜ける
+      if (isFixed) break;
+    }
+
+  }
+
+  /// 後処理
+  void _postProcessing() {
+    // カレントミノをフィックスさせる
+  }
+
+  bool _isCollideBottom() {
+    return true;
   }
 }

@@ -5,31 +5,41 @@ import 'mino_controller.dart';
 
 class TetrisPlayPage extends StatelessWidget {
   final int fallSpeed;
-  final String difficulty;
-  TetrisPlayPage(this.fallSpeed, this.difficulty);
+  final String gameLevel;
+  TetrisPlayPage(this.fallSpeed, this.gameLevel);
 
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MinoController>(
       create: (_) => MinoController(fallSpeed),
-      child: TetrisPlayPageRender(difficulty),
+      child: TetrisPlayPageRender(gameLevel),
     );
   }
 }
 
 
 class TetrisPlayPageRender extends StatelessWidget {
-  final String difficulty;
-  TetrisPlayPageRender(this.difficulty);
+  final String gameLevel;
+  TetrisPlayPageRender(this.gameLevel);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(difficulty),
-      ),
-      body: Center(
-        child: Text("ここらへんでテトリス"),
-      ),
+    return Consumer<MinoController>(
+      builder: (_, minoController, __) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(gameLevel),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.play_arrow),
+                onPressed: () => minoController.startMainLoop(),
+              )
+            ],
+          ),
+          body: Center(
+            child: Text("ここらへんでテトリス"),
+          ),
+        );
+      },
     );
   }
 }
