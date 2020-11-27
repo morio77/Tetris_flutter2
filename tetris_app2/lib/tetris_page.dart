@@ -31,7 +31,7 @@ class TetrisPlayPageRender extends StatelessWidget {
             actions: [
               IconButton(
                 icon: Icon(Icons.play_arrow),
-                onPressed: () => minoController.startMainLoop(),
+                onPressed: () => minoController.startGame(),
               )
             ],
           ),
