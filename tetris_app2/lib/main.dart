@@ -32,9 +32,9 @@ class TetrisHomePage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _raisedButton(context, "易しい" , 100),
-            _raisedButton(context, "普通" , 200),
-            _raisedButton(context, "難しい" , 300),
+            _raisedButton(context, "易しい" , 1000),
+            _raisedButton(context, "普通" , 750),
+            _raisedButton(context, "難しい" , 500),
           ],
         ),
         ),
