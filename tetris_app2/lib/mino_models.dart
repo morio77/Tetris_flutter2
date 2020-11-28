@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:tetris_app2/mino_controller.dart';
+
+import 'mino_painter.dart';
 
 /// ミノモデル（落下中ミノ・Nextミノ・Holdミノに使う）
 class MinoModel {
@@ -48,12 +51,78 @@ class MinoRingBuffer {
     return minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length];
   }
 
-  bool MoveIfCan(int moveXPos, int moveYPos, List<List<MinoType>> fixedMinoArrangement, [int forwardCountFromPointer = 0]) {
+  /// 指定された方向へミノを移動させる
+  /// <return>true:移動できた, false:移動できなかった</return>
+  bool moveIfCan(int moveXPos, int moveYPos, List<List<MinoType>> fixedMinoArrangement, [int forwardCountFromPointer = 0]) {
+    // 移動したものを適用してみてダメなら戻す。OKならそのまま。
+    MinoModel minoModel = minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length];
+    MinoModel _tmpMinoModel = MinoModel(minoModel.minoType, minoModel.minoAngleCW, minoModel.xPos, minoModel.yPos);
+
+    _tmpMinoModel.xPos += moveXPos;
+    _tmpMinoModel.yPos += moveYPos;
+
+    // 衝突チェック
+    if (_isCollideMino(_tmpMinoModel, fixedMinoArrangement)) {
+      return false;
+    }
+    else {
+      minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length] = _tmpMinoModel;
+      return true;
+    }
+  }
+
+  /// 指定された角度だけミノを回転させる
+  /// <return>true:回転できた, false:回転できなかった</return>
+  bool rotateIfCan(MinoAngleCW minoAngleCW, List<List<MinoType>> fixedMinoArrangement, [int forwardCountFromPointer = 0]) {
     return true;
   }
 
-  bool rotateIfCan(MinoAngleCW minoAngleCW, List<List<MinoType>> fixedMinoArrangement, [int forwardCountFromPointer = 0]) {
-    return true;
+  /// 指定されたミノが適用できるかどうかを返す
+  /// <return>true:適用できる, false:適用できない
+  bool _isCollideMino(MinoModel _minoModel, List<List<MinoType>> fixedMinoArrangement) {
+    // // 下端チェック
+    // int adjustY = _minoModel.minoArrangement.indexWhere((line) => line.every((minoType) => minoType == MinoType.MinoType_None) , 1);
+    // if (_minoModel.yPos + adjustY > verticalSeparationCount) return true;
+    //
+    // // 左端チェック
+    // if (_minoModel.xPos < 0) return true;
+    //
+    // // 右端チェック
+    // int addXPos = 0;
+    // _minoModel.minoArrangement.forEach((line) {
+    //   int x = 0;
+    //   line.forEach((minoType) {
+    //     x++;
+    //     if (minoType != MinoType.MinoType_None) {
+    //       if (addXPos < x) addXPos = x;
+    //     }
+    //   });
+    // });
+    // if (_minoModel.xPos + addXPos > horizontalSeparationCount) return true;
+
+    // fixedミノチェック（これですべてのチェックになっているばず）
+    int y = _minoModel.yPos;
+    for (final line in _minoModel.minoArrangement) {
+      int x = _minoModel.xPos;
+      for (final minoType in line) {
+        if (minoType != MinoType.MinoType_None) {
+          try {
+            if (fixedMinoArrangement[y][x] != MinoType.MinoType_None) {
+              return true;
+            }
+          }
+          catch (e) {
+            debugPrint(e.toString());
+            return true;
+          }
+        }
+        x++;
+      }
+      y++;
+    }
+
+    // ここまで来たら適用しても問題なし
+    return false;
   }
 
   /// ポインタを進める
