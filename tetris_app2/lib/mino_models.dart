@@ -23,9 +23,7 @@ class MinoModel {
 
 /// 出てくるミノタイプを表すクラス
 class MinoRingBuffer {
-
-  final int checkPoint1 = 0;
-  final int checkPoint2 = 7;
+  final int checkPoint = 7;
 
   List<MinoModel> minoModelList; // ミノモデルのリスト（リングバッファ）
   int pointer;
@@ -143,16 +141,10 @@ class MinoRingBuffer {
 
   /// ポインタを進める
   void forwardPointer() {
-    // ポインタを1つすすめる
-    if (pointer >= minoModelList.length - 1) {
-      pointer = 0;
-    }
-    else {
-      pointer++;
-    }
+    pointer++;
 
     // 7種のミノが1巡したら、次の7種のミノを生成して詰める
-    if (pointer == checkPoint1 || pointer == checkPoint2) {
+    if ((pointer % checkPoint) == 0) {
       tmpMinoTypeList.shuffle();
 
       for (int i = 0 ; i < 7 ; i++) {
