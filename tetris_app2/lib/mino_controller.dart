@@ -56,17 +56,31 @@ class MinoController extends ChangeNotifier{
   /// ゲームスタート
   void startGame() {
     // タイマーONして、メインループへ
-    onTimer();
+    startTimer();
+  }
+
+  /// ゲームオーバー
+  void gameOver() {
+    debugPrint("ゲームオーバー");
+    stopTimer();
   }
 
 
 
   /// タイマーON
-  void onTimer() {
+  void startTimer() {
     if (timer != null) {
       timer.cancel();
     }
     timer = Timer.periodic(Duration(milliseconds: currentFallSpeed), mainLoop);
+  }
+  
+  /// タイマーオフ
+  void stopTimer() {
+    if (timer != null) {
+      timer.cancel();
+      timer = null;
+    }
   }
 
 
@@ -78,10 +92,8 @@ class MinoController extends ChangeNotifier{
   /// ②1マス落下のループ処理
   void mainLoop(Timer _timer) {
 
-    debugPrint(isFixed.toString());
-
     if (isGameOver) {
-      // 終わり
+      gameOver();
     }
 
     if (isFixed) {
@@ -102,6 +114,10 @@ class MinoController extends ChangeNotifier{
     minoRingBuffer.forwardPointer();
 
     // 衝突判定
+    if (minoRingBuffer.isCollideMino(minoRingBuffer.getMinoModel(), fixedMinoArrangement)) {
+      debugPrint("衝突");
+      isGameOver = true;
+    }
 
     // フィックスフラグを解除
     isFixed = false;
@@ -141,6 +157,16 @@ class MinoController extends ChangeNotifier{
   /// 後処理
   void _postProcessing() {
     // カレントミノをフィックスさせる
+    MinoModel minoModel = minoRingBuffer.getMinoModel();
+    int y = minoModel.yPos;
+    minoModel.minoArrangement.forEach((side) {
+      int x = minoModel.xPos;
+      side.forEach((minoType) {
+        if (minoType != MinoType.MinoType_None) fixedMinoArrangement[y][x] = minoType;
+        x++;
+      });
+      y++;
+    });
 
     // 消せる行があったら、消す
 
@@ -158,11 +184,11 @@ class MinoController extends ChangeNotifier{
     }
 
     // タイマーONして、メインループに戻る
-    onTimer();
+    startTimer();
   }
 
-  /// ミノが下端と衝突するか判定する
-  bool _isCollideBottom() {
-    return true;
+  void rotate(MinoAngleCW minoAngleCW) {
+    minoRingBuffer.rotateIfCan(minoAngleCW, fixedMinoArrangement);
+    notifyListeners();
   }
 }

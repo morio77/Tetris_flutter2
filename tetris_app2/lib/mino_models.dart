@@ -62,7 +62,7 @@ class MinoRingBuffer {
     _tmpMinoModel.yPos += moveYPos;
 
     // 衝突チェック
-    if (_isCollideMino(_tmpMinoModel, fixedMinoArrangement)) {
+    if (isCollideMino(_tmpMinoModel, fixedMinoArrangement)) {
       return false;
     }
     else {
@@ -74,12 +74,26 @@ class MinoRingBuffer {
   /// 指定された角度だけミノを回転させる
   /// <return>true:回転できた, false:回転できなかった</return>
   bool rotateIfCan(MinoAngleCW minoAngleCW, List<List<MinoType>> fixedMinoArrangement, [int forwardCountFromPointer = 0]) {
-    return true;
+    // 回転したものを適用してみてダメなら戻す。OKならそのまま。
+    MinoModel minoModel = minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length];
+
+    MinoAngleCW _tmpMinoAngleCW = MinoAngleCW.values[(minoModel.minoAngleCW.index + minoAngleCW.index) % 4];
+
+    MinoModel _tmpMinoModel = MinoModel(minoModel.minoType, _tmpMinoAngleCW, minoModel.xPos, minoModel.yPos);
+
+    // 衝突チェック
+    if (isCollideMino(_tmpMinoModel, fixedMinoArrangement)) {
+      return false;
+    }
+    else {
+      minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length] = _tmpMinoModel;
+      return true;
+    }
   }
 
   /// 指定されたミノが適用できるかどうかを返す
   /// <return>true:適用できる, false:適用できない
-  bool _isCollideMino(MinoModel _minoModel, List<List<MinoType>> fixedMinoArrangement) {
+  bool isCollideMino(MinoModel _minoModel, List<List<MinoType>> fixedMinoArrangement) {
     // // 下端チェック
     // int adjustY = _minoModel.minoArrangement.indexWhere((line) => line.every((minoType) => minoType == MinoType.MinoType_None) , 1);
     // if (_minoModel.yPos + adjustY > verticalSeparationCount) return true;
@@ -107,6 +121,8 @@ class MinoRingBuffer {
       for (final minoType in line) {
         if (minoType != MinoType.MinoType_None) {
           try {
+            // debugPrint(y.toString());
+            // debugPrint(x.toString());
             if (fixedMinoArrangement[y][x] != MinoType.MinoType_None) {
               return true;
             }
@@ -128,7 +144,7 @@ class MinoRingBuffer {
   /// ポインタを進める
   void forwardPointer() {
     // ポインタを1つすすめる
-    if (pointer == minoModelList.length) {
+    if (pointer >= minoModelList.length - 1) {
       pointer = 0;
     }
     else {

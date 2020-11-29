@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tetris_app2/mino_models.dart';
 
 import 'mino_controller.dart';
 import 'mino_painter.dart';
@@ -38,6 +39,10 @@ class TetrisPlayPageRender extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.play_arrow),
                 onPressed: () => minoController.startGame(),
+              ),
+              IconButton(
+                icon: Icon(Icons.rotate_right),
+                onPressed: () => minoController.rotate(MinoAngleCW.Arg90),
               )
             ],
           ),
