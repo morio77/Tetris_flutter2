@@ -13,10 +13,16 @@ class MinoController extends ChangeNotifier{
   int currentFallSpeed;
   MinoController(this.currentFallSpeed);
 
+  // タップ中における左右累積移動距離（ミノの左右moveが発生・指が離れたら0にリセット）
+  double cumulativeLeftDrag = 0;
+  double cumulativeRightDrag = 0;
+
   Timer timer;
   bool isFixed = true; // 落下中のミノがフィックスしたか
   bool isGameOver = false; // ゲームオーバーになったかどうか。
   MinoRingBuffer minoRingBuffer = MinoRingBuffer(); // 7種1巡の法則が適用された、出現するミノをリングバッファとして保持
+  MinoModel holdMino;
+  bool doneUsedHoldFunction = false;
 
   /// 落下して位置が決まったすべてのミノ（フィックスしたミノ）
   List<List<MinoType>> fixedMinoArrangement = List.generate(20, (index) => List.generate(10, (index) => MinoType.values[0]));
@@ -113,6 +119,9 @@ class MinoController extends ChangeNotifier{
     // 落下中のミノがなければ、落下中のミノを生成する（ポインタを1つ進める）
     minoRingBuffer.forwardPointer();
 
+    // Hold機能使用済みフラグをリセットする
+    doneUsedHoldFunction = false;
+
     // 衝突判定
     if (minoRingBuffer.isCollideMino(minoRingBuffer.getMinoModel(), fixedMinoArrangement)) {
       debugPrint("衝突");
@@ -189,6 +198,27 @@ class MinoController extends ChangeNotifier{
 
   void rotate(MinoAngleCW minoAngleCW) {
     minoRingBuffer.rotateIfCan(minoAngleCW, fixedMinoArrangement);
+    notifyListeners();
+  }
+
+  void moveHorizontal(int moveXPos) {
+    minoRingBuffer.moveIfCan(moveXPos, 0, fixedMinoArrangement);
+    notifyListeners();
+  }
+
+  void changeHoldMinoAndFallingMino() {
+    if (doneUsedHoldFunction || minoRingBuffer.pointer == -1) return;
+
+    if (holdMino == null) {
+      holdMino = minoRingBuffer.getMinoModel();
+      minoRingBuffer.forwardPointer();
+    }
+    else {
+      MinoModel _tmpMinoModel = MinoModel(holdMino.minoType, holdMino.minoAngleCW, 4, 0);
+      holdMino = minoRingBuffer.getMinoModel();
+      minoRingBuffer.minoModelList[minoRingBuffer.pointer] = _tmpMinoModel;
+    }
+    doneUsedHoldFunction = true;
     notifyListeners();
   }
 }

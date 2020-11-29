@@ -32,7 +32,7 @@ class MinoRingBuffer {
 
   // コンストラクタ
   MinoRingBuffer() {
-    pointer = 13;
+    pointer = -1;
     minoModelList = List<MinoModel>(14);
 
     // 7種1巡の法則で7個のミノモデルを生成して、リストに保持
