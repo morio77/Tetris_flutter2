@@ -78,6 +78,59 @@ class TetrisPlayPageRender extends StatelessWidget {
                   ],
                 ),
               ),
+              Container(
+                height: displaySize.height,
+                width: displaySize.width,
+                child: GestureDetector(
+                  onTapUp: (details) { /// タップで回転させる
+                    if(details.globalPosition.dx < displaySize.width * 0.5){
+                      minoController.rotate(MinoAngleCW.Arg270);
+                    }
+                    else {
+                      minoController.rotate(MinoAngleCW.Arg90);
+                    }
+                  },
+                  // onHorizontalDragUpdate: (details) { /// ドラッグで左右移動
+                  //   final double deltaX = details.delta.dx;
+                  //   if(deltaX < 0){
+                  //     Provider.of<MinoState>(context, listen: false).cumulativeLeftDrag += deltaX;
+                  //   }
+                  //   else {
+                  //     Provider.of<MinoState>(context, listen: false).cumulativeRightDrag += deltaX;
+                  //   }
+                  //
+                  //   if(Provider.of<MinoState>(context, listen: false).cumulativeLeftDrag < -horizontalDragThreshold){
+                  //     Provider.of<MinoState>(context, listen: false).moveCurrentMinoHorizon(-1);
+                  //     Provider.of<MinoState>(context, listen: false).cumulativeLeftDrag = 0;
+                  //   }
+                  //
+                  //   if(Provider.of<MinoState>(context, listen: false).cumulativeRightDrag > horizontalDragThreshold){
+                  //     Provider.of<MinoState>(context, listen: false).moveCurrentMinoHorizon(1);
+                  //     Provider.of<MinoState>(context, listen: false).cumulativeRightDrag = 0;
+                  //   }
+                  //
+                  // },
+                  // onHorizontalDragEnd: (details) { /// ドラッグ中にが離れたら、累積左右移動距離を0にしておく
+                  //   Provider.of<MinoState>(context, listen: false).cumulativeLeftDrag = 0;
+                  //   Provider.of<MinoState>(context, listen: false).cumulativeRightDrag = 0;
+                  // },
+                  // onVerticalDragUpdate: (details) { /// ハードドロップ
+                  //   if(details.delta.dy > verticalDragDownThreshold){
+                  //     Provider.of<MinoState>(context, listen: false).hardDropFlag = true;
+                  //   }
+                  // },
+                  // onLongPress: () { /// ソフトドロップON
+                  //   Provider.of<MinoState>(context, listen: false).timer.cancel();
+                  //   Provider.of<MinoState>(context, listen: false).timer = null;
+                  //   Provider.of<MinoState>(context, listen: false).startTimer(50);
+                  // },
+                  // onLongPressEnd: (details) { /// ソフトドロップOFF
+                  //   Provider.of<MinoState>(context, listen: false).timer.cancel();
+                  //   Provider.of<MinoState>(context, listen: false).timer = null;
+                  //   Provider.of<MinoState>(context, listen: false).startTimer(250);
+                  // },
+                ),
+              ),
             ],
           ),
         );
