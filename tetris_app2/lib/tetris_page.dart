@@ -51,7 +51,7 @@ class TetrisPlayPageRender extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(Icons.rotate_right),
-                onPressed: () => minoController.rotate(MinoAngleCW.Arg90),
+                onPressed: () => minoController.rotate(MinoAngleCW.arg90),
               )
             ],
           ),
@@ -93,10 +93,10 @@ class TetrisPlayPageRender extends StatelessWidget {
                 child: GestureDetector(
                   onTapUp: (details) { /// タップで回転させる
                     if(details.globalPosition.dx < displaySize.width * 0.5){
-                      minoController.rotate(MinoAngleCW.Arg270);
+                      minoController.rotate(MinoAngleCW.arg270);
                     }
                     else {
-                      minoController.rotate(MinoAngleCW.Arg90);
+                      minoController.rotate(MinoAngleCW.arg90);
                     }
                   },
                   onHorizontalDragUpdate: (details) { /// ドラッグで左右移動

@@ -117,11 +117,11 @@ class MinoRingBuffer {
     for (final line in _minoModel.minoArrangement) {
       int x = _minoModel.xPos;
       for (final minoType in line) {
-        if (minoType != MinoType.MinoType_None) {
+        if (minoType != MinoType.none) {
           try {
             // debugPrint(y.toString());
             // debugPrint(x.toString());
-            if (fixedMinoArrangement[y][x] != MinoType.MinoType_None) {
+            if (fixedMinoArrangement[y][x] != MinoType.none) {
               return true;
             }
           }
@@ -155,41 +155,41 @@ class MinoRingBuffer {
 }
 
 enum MinoType {
-  MinoType_None, // 0
-  MinoType_I,    // 1
-  MinoType_O,    // 2
-  MinoType_S,    // 3
-  MinoType_Z,    // 4
-  MinoType_J,    // 5
-  MinoType_L,    // 6
-  MinoType_T,    // 7
+  none, // 0
+  I,    // 1
+  O,    // 2
+  S,    // 3
+  Z,    // 4
+  J,    // 5
+  L,    // 6
+  T,    // 7
 }
 
 extension MinoTypeExt on MinoType {
   int get index {
     switch (this) {
-      case MinoType.MinoType_None:
+      case MinoType.none:
         return 0;
         break;
-      case MinoType.MinoType_I:
+      case MinoType.I:
         return 1;
         break;
-      case MinoType.MinoType_O:
+      case MinoType.O:
         return 2;
         break;
-      case MinoType.MinoType_S:
+      case MinoType.S:
         return 3;
         break;
-      case MinoType.MinoType_Z:
+      case MinoType.Z:
         return 4;
         break;
-      case MinoType.MinoType_J:
+      case MinoType.J:
         return 5;
         break;
-      case MinoType.MinoType_L:
+      case MinoType.L:
         return 6;
         break;
-      case MinoType.MinoType_T:
+      case MinoType.T:
         return 7;
         break;
       default:
@@ -199,26 +199,26 @@ extension MinoTypeExt on MinoType {
 }
 
 enum MinoAngleCW {
-  Arg0,
-  Arg90,
-  Arg180,
-  Arg270,
+  arg0,
+  arg90,
+  arg180,
+  arg270,
 }
 
 
 extension MinoAngleCWExt on MinoAngleCW {
   int get index {
     switch (this) {
-      case MinoAngleCW.Arg0:
+      case MinoAngleCW.arg0:
         return 0;
         break;
-      case MinoAngleCW.Arg90:
+      case MinoAngleCW.arg90:
         return 1;
         break;
-      case MinoAngleCW.Arg180:
+      case MinoAngleCW.arg180:
         return 2;
         break;
-      case MinoAngleCW.Arg270:
+      case MinoAngleCW.arg270:
         return 3;
         break;
       default:
@@ -232,184 +232,184 @@ const List<List<List<List<MinoType>>>> minoArrangementList = [
   [], // 0番目なので何もなし
   [ /// Iミノ
     [ // 0度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_I, MinoType.MinoType_I, MinoType.MinoType_I, MinoType.MinoType_I],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.I, MinoType.I, MinoType.I, MinoType.I],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 90度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_I, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_I, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_I, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_I, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.I, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.I, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.I, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.I, MinoType.none],
     ],
     [ // 180度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_I, MinoType.MinoType_I, MinoType.MinoType_I, MinoType.MinoType_I],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.I, MinoType.I, MinoType.I, MinoType.I],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 270度
-      [MinoType.MinoType_None, MinoType.MinoType_I, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_I, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_I, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_I, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.I, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.I, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.I, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.I, MinoType.none, MinoType.none],
     ],
   ],
   [ /// Oミノ
     [ // 0度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_O, MinoType.MinoType_O, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_O, MinoType.MinoType_O, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.O, MinoType.O, MinoType.none],
+      [MinoType.none, MinoType.O, MinoType.O, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 90度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_O, MinoType.MinoType_O, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_O, MinoType.MinoType_O, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.O, MinoType.O, MinoType.none],
+      [MinoType.none, MinoType.O, MinoType.O, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 180度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_O, MinoType.MinoType_O, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_O, MinoType.MinoType_O, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.O, MinoType.O, MinoType.none],
+      [MinoType.none, MinoType.O, MinoType.O, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 270度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_O, MinoType.MinoType_O, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_O, MinoType.MinoType_O, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.O, MinoType.O, MinoType.none],
+      [MinoType.none, MinoType.O, MinoType.O, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
   ],
   [ /// Sミノ
     [ // 0度
-      [MinoType.MinoType_None, MinoType.MinoType_S, MinoType.MinoType_S, MinoType.MinoType_None],
-      [MinoType.MinoType_S, MinoType.MinoType_S, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.S, MinoType.S, MinoType.none],
+      [MinoType.S, MinoType.S, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 90度
-      [MinoType.MinoType_None, MinoType.MinoType_S, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_S, MinoType.MinoType_S, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_S, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.S, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.S, MinoType.S, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.S, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 180度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_S, MinoType.MinoType_S, MinoType.MinoType_None],
-      [MinoType.MinoType_S, MinoType.MinoType_S, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.S, MinoType.S, MinoType.none],
+      [MinoType.S, MinoType.S, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 270度
-      [MinoType.MinoType_S, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_S, MinoType.MinoType_S, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_S, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.S, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.S, MinoType.S, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.S, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
   ],
   [ /// Zミノ
     [ // 0度
-      [MinoType.MinoType_Z, MinoType.MinoType_Z, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_Z, MinoType.MinoType_Z, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.Z, MinoType.Z, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.Z, MinoType.Z, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 90度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_Z, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_Z, MinoType.MinoType_Z, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_Z, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.Z, MinoType.none],
+      [MinoType.none, MinoType.Z, MinoType.Z, MinoType.none],
+      [MinoType.none, MinoType.Z, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 180度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_Z, MinoType.MinoType_Z, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_Z, MinoType.MinoType_Z, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.Z, MinoType.Z, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.Z, MinoType.Z, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 270度
-      [MinoType.MinoType_None, MinoType.MinoType_Z, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_Z, MinoType.MinoType_Z, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_Z, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.Z, MinoType.none, MinoType.none],
+      [MinoType.Z, MinoType.Z, MinoType.none, MinoType.none],
+      [MinoType.Z, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
   ],
   [ /// Jミノ
     [ // 0度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_J, MinoType.MinoType_None],
-      [MinoType.MinoType_J, MinoType.MinoType_J, MinoType.MinoType_J, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.J, MinoType.none],
+      [MinoType.J, MinoType.J, MinoType.J, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 90度
-      [MinoType.MinoType_None, MinoType.MinoType_J, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_J, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_J, MinoType.MinoType_J, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.J, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.J, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.J, MinoType.J, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 180度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_J, MinoType.MinoType_J, MinoType.MinoType_J, MinoType.MinoType_None],
-      [MinoType.MinoType_J, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.J, MinoType.J, MinoType.J, MinoType.none],
+      [MinoType.J, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 270度
-      [MinoType.MinoType_J, MinoType.MinoType_J, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_J, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_J, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.J, MinoType.J, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.J, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.J, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
   ],
   [ /// Lミノ
     [ // 0度
-      [MinoType.MinoType_L, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_L, MinoType.MinoType_L, MinoType.MinoType_L, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.L, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.L, MinoType.L, MinoType.L, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 90度
-      [MinoType.MinoType_None, MinoType.MinoType_L, MinoType.MinoType_L, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_L, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_L, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.L, MinoType.L, MinoType.none],
+      [MinoType.none, MinoType.L, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.L, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 180度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_L, MinoType.MinoType_L, MinoType.MinoType_L, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_L, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.L, MinoType.L, MinoType.L, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.L, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 270度
-      [MinoType.MinoType_None, MinoType.MinoType_L, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_L, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_L, MinoType.MinoType_L, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.L, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.L, MinoType.none, MinoType.none],
+      [MinoType.L, MinoType.L, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
   ],
   [ /// Tミノ
     [ // 0度
-      [MinoType.MinoType_None, MinoType.MinoType_T, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_T, MinoType.MinoType_T, MinoType.MinoType_T, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.T, MinoType.none, MinoType.none],
+      [MinoType.T, MinoType.T, MinoType.T, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 90度
-      [MinoType.MinoType_None, MinoType.MinoType_T, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_T, MinoType.MinoType_T, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_T, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.T, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.T, MinoType.T, MinoType.none],
+      [MinoType.none, MinoType.T, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 180度
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_T, MinoType.MinoType_T, MinoType.MinoType_T, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_T, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
+      [MinoType.T, MinoType.T, MinoType.T, MinoType.none],
+      [MinoType.none, MinoType.T, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
     [ // 270度
-      [MinoType.MinoType_None, MinoType.MinoType_T, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_T, MinoType.MinoType_T, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_T, MinoType.MinoType_None, MinoType.MinoType_None],
-      [MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None, MinoType.MinoType_None],
+      [MinoType.none, MinoType.T, MinoType.none, MinoType.none],
+      [MinoType.T, MinoType.T, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.T, MinoType.none, MinoType.none],
+      [MinoType.none, MinoType.none, MinoType.none, MinoType.none],
     ],
   ],
 ];

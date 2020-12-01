@@ -171,7 +171,7 @@ class MinoController extends ChangeNotifier{
     minoModel.minoArrangement.forEach((side) {
       int x = minoModel.xPos;
       side.forEach((minoType) {
-        if (minoType != MinoType.MinoType_None) fixedMinoArrangement[y][x] = minoType;
+        if (minoType != MinoType.none) fixedMinoArrangement[y][x] = minoType;
         x++;
       });
       y++;
