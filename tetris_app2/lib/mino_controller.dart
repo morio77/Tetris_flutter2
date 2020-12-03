@@ -123,7 +123,7 @@ class MinoController extends ChangeNotifier{
     doneUsedHoldFunction = false;
 
     // 衝突判定
-    if (minoRingBuffer.isCollideMino(minoRingBuffer.getMinoModel(), fixedMinoArrangement)) {
+    if (minoRingBuffer.hasCollision(minoRingBuffer.getMinoModel(), fixedMinoArrangement)) {
       debugPrint("衝突");
       isGameOver = true;
     }

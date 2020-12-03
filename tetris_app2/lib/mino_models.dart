@@ -5,21 +5,32 @@ import 'mino_painter.dart';
 
 /// ミノモデル（落下中ミノ・Nextミノ・Holdミノに使う）
 class MinoModel {
-  MinoType minoType;
-  MinoAngleCW minoAngleCW;
-  int xPos; // 左上が原点
-  int yPos; // 左上が原点
-  List<List<MinoType>> minoArrangement; // 配置図
+  final MinoType minoType;
+  final MinoAngleCW minoAngleCW;
+  final int xPos; // 左上が原点
+  final int yPos; // 左上が原点
+  final List<List<MinoType>> minoArrangement; // 配置図
 
-  MinoModel(minoType, minoAngleCW, xPos, yPos) {
-    this.minoType = minoType;
-    this.minoAngleCW = minoAngleCW;
-    this.xPos = xPos;
-    this.yPos = yPos;
+  MinoModel(this.minoType, this.minoAngleCW, this.xPos, this.yPos)
+      :this.minoArrangement = minoArrangementList[minoType.index][minoAngleCW.index];
 
-    this.minoArrangement = minoArrangementList[this.minoType.index][this.minoAngleCW.index];
+  MinoModel copyWith({
+    final MinoType minoType,
+    final MinoAngleCW minoAngleCW,
+    final int xPos, // 左上が原点
+    final int yPos, // 左上が原点
+    // List<List<MinoType>> minoArrangement, // 配置図
+  }) {
+    return MinoModel(
+      minoType ?? this.minoType,
+      minoAngleCW ?? this.minoAngleCW,
+      xPos ?? this.xPos,
+      yPos ?? this.yPos,
+    );
   }
 }
+
+
 
 /// 出てくるミノタイプを表すクラス
 class MinoRingBuffer {
@@ -54,17 +65,14 @@ class MinoRingBuffer {
   bool moveIfCan(int moveXPos, int moveYPos, List<List<MinoType>> fixedMinoArrangement, [int forwardCountFromPointer = 0]) {
     // 移動したものを適用してみてダメなら戻す。OKならそのまま。
     MinoModel minoModel = minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length];
-    MinoModel _tmpMinoModel = MinoModel(minoModel.minoType, minoModel.minoAngleCW, minoModel.xPos, minoModel.yPos);
-
-    _tmpMinoModel.xPos += moveXPos;
-    _tmpMinoModel.yPos += moveYPos;
+    MinoModel _moveMinoModel = minoModel.copyWith(xPos: minoModel.xPos + moveXPos, yPos: minoModel.yPos + moveYPos);
 
     // 衝突チェック
-    if (isCollideMino(_tmpMinoModel, fixedMinoArrangement)) {
+    if (hasCollision(_moveMinoModel, fixedMinoArrangement)) {
       return false;
     }
     else {
-      minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length] = _tmpMinoModel;
+      minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length] = _moveMinoModel;
       return true;
     }
   }
@@ -75,23 +83,22 @@ class MinoRingBuffer {
     // 回転したものを適用してみてダメなら戻す。OKならそのまま。
     MinoModel minoModel = minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length];
 
-    MinoAngleCW _tmpMinoAngleCW = MinoAngleCW.values[(minoModel.minoAngleCW.index + minoAngleCW.index) % 4];
-
-    MinoModel _tmpMinoModel = MinoModel(minoModel.minoType, _tmpMinoAngleCW, minoModel.xPos, minoModel.yPos);
+    MinoAngleCW _afterRotationAngleCW = MinoAngleCW.values[(minoModel.minoAngleCW.index + minoAngleCW.index) % 4];
+    MinoModel _rotationMinoModel = minoModel.copyWith(minoAngleCW: _afterRotationAngleCW);
 
     // 衝突チェック
-    if (isCollideMino(_tmpMinoModel, fixedMinoArrangement)) {
+    if (hasCollision(_rotationMinoModel, fixedMinoArrangement)) {
       return false;
     }
     else {
-      minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length] = _tmpMinoModel;
+      minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length] = _rotationMinoModel;
       return true;
     }
   }
 
   /// 指定されたミノが適用できるかどうかを返す
   /// <return>true:適用できる, false:適用できない
-  bool isCollideMino(MinoModel _minoModel, List<List<MinoType>> fixedMinoArrangement) {
+  bool hasCollision(MinoModel _minoModel, List<List<MinoType>> fixedMinoArrangement) {
     // // 下端チェック
     // int adjustY = _minoModel.minoArrangement.indexWhere((line) => line.every((minoType) => minoType == MinoType.MinoType_None) , 1);
     // if (_minoModel.yPos + adjustY > verticalSeparationCount) return true;
