@@ -206,6 +206,19 @@ class MinoController extends ChangeNotifier{
     notifyListeners();
   }
 
+  /// 落下予測位置を取得する
+  MinoModel getFallMinoModel() {
+    var _fallMinoModel = minoRingBuffer.getMinoModel().copyWith();
+    var _oneStepDownMinoModel = _fallMinoModel.copyWith(yPos: _fallMinoModel.yPos + 1);
+
+    while (!minoRingBuffer.hasCollision(_oneStepDownMinoModel, fixedMinoArrangement)) {
+      _fallMinoModel = _oneStepDownMinoModel.copyWith();
+      _oneStepDownMinoModel = _oneStepDownMinoModel.copyWith(yPos: _oneStepDownMinoModel.yPos + 1);
+    }
+
+    return _fallMinoModel;
+  }
+
   void changeHoldMinoAndFallingMino() {
     if (doneUsedHoldFunction || minoRingBuffer.pointer == -1) return;
 

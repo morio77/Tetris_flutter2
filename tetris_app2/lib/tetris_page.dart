@@ -84,6 +84,14 @@ class TetrisPlayPageRender extends StatelessWidget {
                         painter: minoController.minoRingBuffer.pointer == -1 ? null : FallingMinoPainter(minoController.minoRingBuffer.getMinoModel()),
                       ),
                     ),
+                    Container(
+                      color: Colors.grey.withOpacity(opacity),
+                      height: playWindowHeight,
+                      width: playWindowWidth,
+                      child: CustomPaint( /// 落下予測位置を描画
+                        painter: minoController.minoRingBuffer.pointer == -1 ? null : FallPositionPainter(minoController.getFallMinoModel()),
+                      ),
+                    ),
                   ],
                 ),
               ),
