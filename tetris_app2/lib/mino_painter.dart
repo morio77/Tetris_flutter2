@@ -148,7 +148,7 @@ class FallPositionPainter extends CustomPainter {
     paint.color = Colors.redAccent;
     paint.style = PaintingStyle.stroke;
     paint.strokeWidth = 5;
-    
+
     double yPos = minoModel.yPos * heightOfCell;
     double xPos;
 

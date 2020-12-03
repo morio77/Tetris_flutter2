@@ -83,17 +83,38 @@ class MinoRingBuffer {
     // 回転したものを適用してみてダメなら戻す。OKならそのまま。
     MinoModel minoModel = minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length];
 
+    List<MinoModel> minoModelListWithSRS = _getMinoModelListWithSRS(minoModel, minoAngleCW);
+
+    for (MinoModel rotateMinoModel in minoModelListWithSRS) {
+      if (!hasCollision(rotateMinoModel, fixedMinoArrangement)) {
+        minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length] = rotateMinoModel;
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  List<MinoModel> _getMinoModelListWithSRS(MinoModel minoModel, MinoAngleCW minoAngleCW) {
+
     MinoAngleCW _afterRotationAngleCW = MinoAngleCW.values[(minoModel.minoAngleCW.index + minoAngleCW.index) % 4];
     MinoModel _rotationMinoModel = minoModel.copyWith(minoAngleCW: _afterRotationAngleCW);
 
-    // 衝突チェック
-    if (hasCollision(_rotationMinoModel, fixedMinoArrangement)) {
-      return false;
+    var minoModelListWithSRS = List<MinoModel>();
+    minoModelListWithSRS.add(_rotationMinoModel);
+
+    if (minoModel.minoType == MinoType.O) {
+      // 何もしない
+    }
+    else if (minoModel.minoType == MinoType.I) {
+
     }
     else {
-      minoModelList[(pointer + forwardCountFromPointer) % minoModelList.length] = _rotationMinoModel;
-      return true;
+
     }
+
+    return minoModelListWithSRS;
+
   }
 
   /// 指定されたミノが適用できるかどうかを返す
