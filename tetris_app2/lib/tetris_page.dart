@@ -100,7 +100,7 @@ class TetrisPlayPageRender extends StatelessWidget {
                 width: displaySize.width,
                 child: GestureDetector(
                   onTapUp: (details) { /// タップで回転させる
-                    if(details.globalPosition.dx < displaySize.width * 0.5){
+                    if (details.globalPosition.dx < displaySize.width * 0.5) {
                       minoController.rotate(MinoAngleCW.arg270);
                     }
                     else {
@@ -109,19 +109,19 @@ class TetrisPlayPageRender extends StatelessWidget {
                   },
                   onHorizontalDragUpdate: (details) { /// ドラッグで左右移動
                     final double deltaX = details.delta.dx;
-                    if(deltaX < 0){
+                    if (deltaX < 0) {
                       minoController.cumulativeLeftDrag += deltaX;
                     }
                     else {
                       minoController.cumulativeRightDrag += deltaX;
                     }
 
-                    if(minoController.cumulativeLeftDrag < -horizontalDragThreshold){
+                    if (minoController.cumulativeLeftDrag < -horizontalDragThreshold) {
                       minoController.moveHorizontal(-1);
                       minoController.cumulativeLeftDrag = 0;
                     }
 
-                    if(minoController.cumulativeRightDrag > horizontalDragThreshold){
+                    if (minoController.cumulativeRightDrag > horizontalDragThreshold) {
                       minoController.moveHorizontal(1);
                       minoController.cumulativeRightDrag = 0;
                     }
@@ -131,11 +131,11 @@ class TetrisPlayPageRender extends StatelessWidget {
                     minoController.cumulativeLeftDrag = 0;
                     minoController.cumulativeRightDrag = 0;
                   },
-                  // onVerticalDragUpdate: (details) { /// ハードドロップ
-                  //   if(details.delta.dy > verticalDragDownThreshold){
-                  //     Provider.of<MinoState>(context, listen: false).hardDropFlag = true;
-                  //   }
-                  // },
+                  onVerticalDragUpdate: (details) { /// ハードドロップ
+                    if (details.delta.dy > verticalDragDownThreshold) {
+                      minoController.doHardDrop();
+                    }
+                  },
                   // onLongPress: () { /// ソフトドロップON
                   //   Provider.of<MinoState>(context, listen: false).timer.cancel();
                   //   Provider.of<MinoState>(context, listen: false).timer = null;

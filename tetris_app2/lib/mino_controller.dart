@@ -177,6 +177,8 @@ class MinoController extends ChangeNotifier{
       y++;
     });
 
+    isFixed = true;
+
     // 消せる行があったら、消す
 
     notifyListeners();
@@ -217,6 +219,14 @@ class MinoController extends ChangeNotifier{
     }
 
     return _fallMinoModel;
+  }
+
+  /// ハードドロップ
+  void doHardDrop() {
+    var fallMinoModel = getFallMinoModel();
+    minoRingBuffer.minoModelList[minoRingBuffer.pointer] = fallMinoModel.copyWith();
+    _postProcessing();
+    notifyListeners();
   }
 
   void changeHoldMinoAndFallingMino() {
