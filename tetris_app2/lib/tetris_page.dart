@@ -132,26 +132,22 @@ class TetrisPlayPageRender extends StatelessWidget {
                     minoController.cumulativeRightDrag = 0;
                   },
                   onVerticalDragUpdate: (details) { /// ハードドロップ ＆ Hold機能
-                    if (details.delta.dy > verticalDragDownThreshold && minoController.isPossibleHardDrop) {
+                    if (details.delta.dy > verticalDragDownThreshold && minoController.isPossibleHardDrop) { // ハードドロップ
                       minoController.doHardDrop();
                     }
-                    else if (details.delta.dy < 0) {
+                    else if (details.delta.dy < 0) { // Hold機能
                       minoController.changeHoldMinoAndFallingMino();
                     }
                   },
-                    onVerticalDragEnd: (details) {
-                      minoController.isPossibleHardDrop = true;
-                    }
-                  // onLongPress: () { /// ソフトドロップON
-                  //   Provider.of<MinoState>(context, listen: false).timer.cancel();
-                  //   Provider.of<MinoState>(context, listen: false).timer = null;
-                  //   Provider.of<MinoState>(context, listen: false).startTimer(50);
-                  // },
-                  // onLongPressEnd: (details) { /// ソフトドロップOFF
-                  //   Provider.of<MinoState>(context, listen: false).timer.cancel();
-                  //   Provider.of<MinoState>(context, listen: false).timer = null;
-                  //   Provider.of<MinoState>(context, listen: false).startTimer(250);
-                  // },
+                  onVerticalDragEnd: (details) {
+                    minoController.isPossibleHardDrop = true;
+                  },
+                  onLongPress: () { /// ソフトドロップON
+                    minoController.OnSoftDropMode();
+                  },
+                  onLongPressEnd: (details) { /// ソフトドロップOFF
+                    minoController.OffSoftDropMode();
+                  },
                 ),
               ),
               Stack( /// NEXT,HOLD枠

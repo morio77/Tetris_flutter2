@@ -27,6 +27,7 @@ class MinoController extends ChangeNotifier{
   bool isPossibleHardDrop = true; // ハードドロップを1度使用したら、指が離れるまではfalseにしておく
   int millSecondIn1Loop = 0;
   bool doneHardDropIn1Loop = false;
+  int memoryCurrentFallSpeed;
 
   /// 落下して位置が決まったすべてのミノ（フィックスしたミノ）
   List<List<MinoType>> fixedMinoArrangement = List.generate(20, (index) => List.generate(10, (index) => MinoType.values[0]));
@@ -202,6 +203,10 @@ class MinoController extends ChangeNotifier{
     if (currentFallSpeed > lowerLimitOfFallSpeed){
       currentFallSpeed--;
     }
+
+    if (memoryCurrentFallSpeed > lowerLimitOfFallSpeed) {
+      memoryCurrentFallSpeed--;
+    }
   }
 
   /// 回転
@@ -239,6 +244,17 @@ class MinoController extends ChangeNotifier{
     doneHardDropIn1Loop = true;
 
     notifyListeners();
+  }
+
+  /// ソフトドロップON
+  void OnSoftDropMode() {
+    memoryCurrentFallSpeed = currentFallSpeed;
+    currentFallSpeed = 100;
+  }
+
+  /// ソフトドロップOFF
+  void OffSoftDropMode() {
+    currentFallSpeed = memoryCurrentFallSpeed;
   }
 
   /// Hold機能
