@@ -131,9 +131,12 @@ class TetrisPlayPageRender extends StatelessWidget {
                     minoController.cumulativeLeftDrag = 0;
                     minoController.cumulativeRightDrag = 0;
                   },
-                  onVerticalDragUpdate: (details) { /// ハードドロップ
+                  onVerticalDragUpdate: (details) { /// ハードドロップ ＆ Hold機能
                     if (details.delta.dy > verticalDragDownThreshold && minoController.isPossibleHardDrop) {
                       minoController.doHardDrop();
+                    }
+                    else if (details.delta.dy < 0) {
+                      minoController.changeHoldMinoAndFallingMino();
                     }
                   },
                     onVerticalDragEnd: (details) {
