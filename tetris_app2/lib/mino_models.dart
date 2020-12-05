@@ -279,6 +279,11 @@ class MinoRingBuffer {
       }
     }
   }
+
+  /// 今のミノモデルを任意のミノモデルに置き換える
+  void changeFallingMinoModel(MinoModel minoModel) {
+    minoModelList[pointer % minoModelList.length] = minoModel.copyWith();
+  }
 }
 
 enum MinoType {

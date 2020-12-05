@@ -22,7 +22,8 @@ class MinoController extends ChangeNotifier{
   bool isGameOver = false; // ゲームオーバーになったかどうか。
   MinoRingBuffer minoRingBuffer = MinoRingBuffer(); // 7種1巡の法則が適用された、出現するミノをリングバッファとして保持
   MinoModel holdMino;
-  bool doneUsedHoldFunction = false;
+  bool doneUsedHoldFunction = false; // Hold機能は1つのミノに対して一回まで
+  bool isPossibleHardDrop = true; // ハードドロップを1度使用したら、指が離れるまではfalseにしておく
 
   /// 落下して位置が決まったすべてのミノ（フィックスしたミノ）
   List<List<MinoType>> fixedMinoArrangement = List.generate(20, (index) => List.generate(10, (index) => MinoType.values[0]));
@@ -61,33 +62,31 @@ class MinoController extends ChangeNotifier{
 
   /// ゲームスタート
   void startGame() {
-    // タイマーONして、メインループへ
-    startTimer();
+    // メインループへ
+    mainLoop(currentFallSpeed);
   }
 
   /// ゲームオーバー
   void gameOver() {
     debugPrint("ゲームオーバー");
-    stopTimer();
+    // stopTimer();
   }
 
-
-
-  /// タイマーON
-  void startTimer() {
-    if (timer != null) {
-      timer.cancel();
-    }
-    timer = Timer.periodic(Duration(milliseconds: currentFallSpeed), mainLoop);
-  }
+  // /// タイマーON
+  // void startTimer() {
+  //   if (timer != null) {
+  //     timer.cancel();
+  //   }
+  //   timer = Timer.periodic(Duration(milliseconds: currentFallSpeed), mainLoop);
+  // }
   
-  /// タイマーオフ
-  void stopTimer() {
-    if (timer != null) {
-      timer.cancel();
-      timer = null;
-    }
-  }
+  // /// タイマーオフ
+  // void stopTimer() {
+  //   if (timer != null) {
+  //     timer.cancel();
+  //     timer = null;
+  //   }
+  // }
 
 
 
@@ -95,20 +94,21 @@ class MinoController extends ChangeNotifier{
   /// メインのループ
   /// =============
   /// ①ミノを生成する
-  /// ②1マス落下のループ処理
-  void mainLoop(Timer _timer) {
+  /// ②1マス落下処理
+  Future<void> mainLoop(int fallSpeed) async {
 
-    if (isGameOver) {
-      gameOver();
+    while (!isGameOver) {
+      if (isFixed) {
+        _generateFallingMino();
+      }
+      else {
+        _subRoutine();
+      }
+
+      await Future.delayed(Duration(milliseconds: fallSpeed));
     }
 
-    if (isFixed) {
-      _generateFallingMino();
-    }
-    else {
-      _subRoutine();
-    }
-
+    gameOver();
   }
 
 
@@ -178,31 +178,34 @@ class MinoController extends ChangeNotifier{
     });
 
     isFixed = true;
+    isPossibleHardDrop = false;
 
     // 消せる行があったら、消す
 
     notifyListeners();
 
     // 落下速度を速める（タイマーをリセットする）
-    _changeTimerDurationPossible();
+    // _changeTimerDurationPossible();
   }
 
-  /// （フィックス後に）タイマーを速める
-  void _changeTimerDurationPossible() {
-    // 落下速度を 1ms 速める
-    if (currentFallSpeed > lowerLimitOfFallSpeed){
-      currentFallSpeed--;
-    }
+  // /// （フィックス後に）タイマーを速める
+  // void _changeTimerDurationPossible() {
+  //   // 落下速度を 1ms 速める
+  //   if (currentFallSpeed > lowerLimitOfFallSpeed){
+  //     currentFallSpeed--;
+  //   }
+  //
+  //   // タイマーONして、メインループに戻る
+  //   startTimer(currentFallSpeed);
+  // }
 
-    // タイマーONして、メインループに戻る
-    startTimer();
-  }
-
+  /// 回転
   void rotate(MinoAngleCW minoAngleCW) {
     minoRingBuffer.rotateIfCan(minoAngleCW, fixedMinoArrangement);
     notifyListeners();
   }
 
+  /// 左右移動
   void moveHorizontal(int moveXPos) {
     minoRingBuffer.moveIfCan(moveXPos, 0, fixedMinoArrangement);
     notifyListeners();
@@ -224,11 +227,12 @@ class MinoController extends ChangeNotifier{
   /// ハードドロップ
   void doHardDrop() {
     var fallMinoModel = getFallMinoModel();
-    minoRingBuffer.minoModelList[minoRingBuffer.pointer] = fallMinoModel.copyWith();
+    minoRingBuffer.changeFallingMinoModel(fallMinoModel);
     _postProcessing();
     notifyListeners();
   }
 
+  /// Hold機能
   void changeHoldMinoAndFallingMino() {
     if (doneUsedHoldFunction || minoRingBuffer.pointer == -1) return;
 
