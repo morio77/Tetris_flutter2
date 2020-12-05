@@ -192,6 +192,7 @@ class MinoController extends ChangeNotifier{
     isPossibleHardDrop = false;
 
     // 消せる行があったら、消す
+    _deleteLineIfCan();
 
     notifyListeners();
 
@@ -207,6 +208,24 @@ class MinoController extends ChangeNotifier{
     if (memoryCurrentFallSpeed > lowerLimitOfFallSpeed) {
       memoryCurrentFallSpeed--;
     }
+  }
+
+  void _deleteLineIfCan() {
+    var deleteLineIndexs = List<int>();
+
+    // 削除する行番号を取得
+    for (int index = 0 ; index < 20 ; index++) {
+      if (fixedMinoArrangement[index].every((minoType) => minoType != MinoType.none)) {
+        deleteLineIndexs.add(index);
+      }
+    }
+
+    // 削除実行
+    deleteLineIndexs.forEach((index) {
+      fixedMinoArrangement.removeAt(index);
+      fixedMinoArrangement.insert(0, List.generate(10, (index) => MinoType.values[0]));
+    });
+
   }
 
   /// 回転
