@@ -250,9 +250,9 @@ class MinoController extends ChangeNotifier{
       minoRingBuffer.forwardPointer();
     }
     else {
-      MinoModel _tmpMinoModel = MinoModel(holdMino.minoType, holdMino.minoAngleCW, 4, 0);
+      MinoModel _willFallingMinoModel = MinoModel(holdMino.minoType, holdMino.minoAngleCW, 4, 0);
       holdMino = minoRingBuffer.getMinoModel();
-      minoRingBuffer.minoModelList[minoRingBuffer.pointer] = _tmpMinoModel;
+      minoRingBuffer.changeFallingMinoModel(_willFallingMinoModel);
     }
     doneUsedHoldFunction = true;
     notifyListeners();
