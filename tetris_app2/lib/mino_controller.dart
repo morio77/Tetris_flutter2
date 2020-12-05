@@ -13,17 +13,20 @@ class MinoController extends ChangeNotifier{
   int currentFallSpeed;
   MinoController(this.currentFallSpeed);
 
+  final sw = Stopwatch();
+
   // タップ中における左右累積移動距離（ミノの左右moveが発生・指が離れたら0にリセット）
   double cumulativeLeftDrag = 0;
   double cumulativeRightDrag = 0;
 
-  Timer timer;
   bool isFixed = true; // 落下中のミノがフィックスしたか
   bool isGameOver = false; // ゲームオーバーになったかどうか。
   MinoRingBuffer minoRingBuffer = MinoRingBuffer(); // 7種1巡の法則が適用された、出現するミノをリングバッファとして保持
   MinoModel holdMino;
   bool doneUsedHoldFunction = false; // Hold機能は1つのミノに対して一回まで
   bool isPossibleHardDrop = true; // ハードドロップを1度使用したら、指が離れるまではfalseにしておく
+  int millSecondIn1Loop = 0;
+  bool doneHardDropIn1Loop = false;
 
   /// 落下して位置が決まったすべてのミノ（フィックスしたミノ）
   List<List<MinoType>> fixedMinoArrangement = List.generate(20, (index) => List.generate(10, (index) => MinoType.values[0]));
@@ -56,14 +59,13 @@ class MinoController extends ChangeNotifier{
   void dispose() {
     super.dispose();
 
-    if (timer != null) timer.cancel();
-    timer = null;
+    sw.stop();
   }
 
   /// ゲームスタート
   void startGame() {
     // メインループへ
-    mainLoop(currentFallSpeed);
+    mainLoop();
   }
 
   /// ゲームオーバー
@@ -95,17 +97,25 @@ class MinoController extends ChangeNotifier{
   /// =============
   /// ①ミノを生成する
   /// ②1マス落下処理
-  Future<void> mainLoop(int fallSpeed) async {
+  Future<void> mainLoop() async {
+    sw.start();
 
     while (!isGameOver) {
-      if (isFixed) {
-        _generateFallingMino();
-      }
-      else {
-        _subRoutine();
-      }
+      millSecondIn1Loop = sw.elapsedMilliseconds;
 
-      await Future.delayed(Duration(milliseconds: fallSpeed));
+      if (millSecondIn1Loop > currentFallSpeed || doneHardDropIn1Loop) {
+        if (isFixed) {
+          _generateFallingMino();
+        }
+        else {
+          _subRoutine();
+        }
+
+        millSecondIn1Loop = 0;
+        sw.reset();
+        doneHardDropIn1Loop = false;
+      }
+      await Future.delayed(Duration(milliseconds: 20));
     }
 
     gameOver();
@@ -184,20 +194,15 @@ class MinoController extends ChangeNotifier{
 
     notifyListeners();
 
-    // 落下速度を速める（タイマーをリセットする）
-    // _changeTimerDurationPossible();
+    // 落下速度を速める
+    _changeFallSpeed();
   }
 
-  // /// （フィックス後に）タイマーを速める
-  // void _changeTimerDurationPossible() {
-  //   // 落下速度を 1ms 速める
-  //   if (currentFallSpeed > lowerLimitOfFallSpeed){
-  //     currentFallSpeed--;
-  //   }
-  //
-  //   // タイマーONして、メインループに戻る
-  //   startTimer(currentFallSpeed);
-  // }
+  void _changeFallSpeed() {
+    if (currentFallSpeed > lowerLimitOfFallSpeed){
+      currentFallSpeed--;
+    }
+  }
 
   /// 回転
   void rotate(MinoAngleCW minoAngleCW) {
@@ -229,6 +234,10 @@ class MinoController extends ChangeNotifier{
     var fallMinoModel = getFallMinoModel();
     minoRingBuffer.changeFallingMinoModel(fallMinoModel);
     _postProcessing();
+
+    // 時間を待たずに、ループの先頭に戻る
+    doneHardDropIn1Loop = true;
+
     notifyListeners();
   }
 
